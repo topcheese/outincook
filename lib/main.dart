@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
+import './src/data_source/sharedprefrences_store.dart';
 import 'src/ui/pages/login_page.dart';
 import 'src/ui/pages/pages.dart';
 import 'src/domain/entities/entities.dart';
 import 'src/ui/pages/recipes/recipes_page.dart';
+
+enum DBEnv { fake, hive, sembast, sharedPrefrences }
+
+late DBEnv dbEnv;
+
+final localStore = RM.inject(
+  () => {
+    DBEnv.sharedPrefrences: SharedPreferencesStore(),
+  }[dbEnv]!,
+);
 
 final navigator = RM.injectNavigator(
   transitionsBuilder: RM.transitions.upToBottom(),

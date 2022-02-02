@@ -1,7 +1,7 @@
 import '../../../lib/src/view_models/exceptions/exceptions.dart';
 import '../../../lib/src/view_models/view_models.dart';
 import '../../../lib/src/domain/entities/entities.dart';
-import '../../../lib/src/ui/pages/pages.dart';
+import '../../../lib/src/ui/pages/recipes/recipes_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
