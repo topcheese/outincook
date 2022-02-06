@@ -1,3 +1,5 @@
+import 'package:outincook/src/domain/entities/entities.dart';
+
 import '../../lib/src/view_models/exceptions/exceptions.dart';
 import '../../lib/src/data_source/api.dart';
 import '../../lib/src/domain/entities/entities.dart';
@@ -44,7 +46,7 @@ class FakeRecipeRepository implements RecipeRepository {
   FakeRecipeRepository({this.error});
 
   @override
-  Future<List<Recipe>> read([int? userId]) async {
+  Future<List<Recipe>> read([RecipeParam? userId]) async {
     if (userId == null) {
       throw NullNumberException();
     }
