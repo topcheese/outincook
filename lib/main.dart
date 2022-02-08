@@ -36,7 +36,7 @@ final recipes = RM.injectCRUD<Recipe, RecipeParam>(() => RecipeRepository(),
           ),
         );
       },
-      onResult: (_) => {},
+      onResult: (_) {},
     ));
 
 final navigator = RM.injectNavigator(
