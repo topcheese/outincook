@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:outincook/src/ui/localization/localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 //import 'package:outincook/src/data_source/api.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
@@ -12,11 +14,11 @@ enum DBEnv { fake, hive, sembast, sharedPrefrences }
 
 late DBEnv dbEnv;
 
-final localStore = RM.inject(
+/* final localStore = RM.inject(
   () => {
     DBEnv.sharedPrefrences: SharedPreferencesStore(),
   }[dbEnv]!,
-);
+); */
 
 /* final recipes = RM.injectCRUD<Recipe, RecipeParam>(() => RecipeRepository(),
     param: () => RecipeParam(id: 1, userId: '2', title: 'Fake Recipe'),
@@ -50,16 +52,29 @@ final navigator = RM.injectNavigator(
   },
 );
 
-void main() => runApp(App());
+void main() async {
+  runApp(App());
+}
 
-class App extends StatelessWidget {
+class App extends TopStatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget? splashScreen() {
+    return MaterialApp(
+      theme: ThemeData.dark(),
+      home: Scaffold(
+        body: Container(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'OutInCook Demo',
-      theme: ThemeData(),
-      routeInformationParser: navigator.routeInformationParser,
-      routerDelegate: navigator.routerDelegate,
+    return MaterialApp(
+      title: i18n.state.appTitle,
+      // theme
+      theme: isDark.darkTheme,
     );
   }
 }
