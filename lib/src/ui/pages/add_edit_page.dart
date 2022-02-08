@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:outincook/src/ui/pages/home_page.dart';
+//import 'package:outincook/src/ui/pages/home_page.dart';
 import 'package:outincook/src/view_models/recipes_vm.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import '../localization/localization.dart';
@@ -8,7 +8,8 @@ import '../localization/localization.dart';
 import '../../domain/entities/entities.dart';
 import '../../data_source/api.dart';
 
-final recipes = RM.injectCRUD<Recipe, RecipeParam>(
+final InjectedCRUD<Recipe, RecipeParam> recipes =
+    RM.injectCRUD<Recipe, RecipeParam>(
   () => RecipeRepository(),
   param: () => RecipeParam(id: 1, userId: '2', title: 'Mock Recipe 1'),
   readOnInitialization: true,
@@ -38,7 +39,7 @@ final Injected<List<int>> count = RM.injectFuture<List<int>>(() async {
 final _recipe = RM.injectTextEditing(text: '', validators: [
   (val) {
     if (val!.trim().isEmpty) {
-      //return i18n.of(RM.context!).emptyRecipeError;
+      // return i18n.of(RM.context!).toString();
     }
   }
 ]);
@@ -50,6 +51,9 @@ class AddEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /* T != dynamic && T != Object
+  "Type can not inferred, please declare it explicitly" */
+    // final _i18n = i18n.of(context);
     final recipe = recipesVM.recipesRM.item(context);
     return Scaffold(
       appBar: AppBar(
@@ -69,13 +73,14 @@ class AddEditPage extends StatelessWidget {
                   ),
                   // autofocus: isEditing ? false : true,
                   style: Theme.of(context).textTheme.headline5,
-                  // decoration: InputDecoration(hintText: _i18n.newRecipeHint),
+                  // decoration: InputDecoration(hintText: ''),
                 ),
               ],
             );
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {}),
     );
   }
 }

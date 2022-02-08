@@ -1,1 +1,3 @@
-class AR {}
+class AR {
+  final String newRecipeHint = '';
+}

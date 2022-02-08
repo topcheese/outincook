@@ -18,7 +18,7 @@ final localStore = RM.inject(
   }[dbEnv]!,
 );
 
-final recipes = RM.injectCRUD<Recipe, RecipeParam>(() => RecipeRepository(),
+/* final recipes = RM.injectCRUD<Recipe, RecipeParam>(() => RecipeRepository(),
     param: () => RecipeParam(id: 1, userId: '2', title: 'Fake Recipe'),
     readOnInitialization: true,
     debugPrintWhenNotifiedPreMessage: '',
@@ -37,7 +37,7 @@ final recipes = RM.injectCRUD<Recipe, RecipeParam>(() => RecipeRepository(),
         );
       },
       onResult: (_) {},
-    ));
+    )); */
 
 final navigator = RM.injectNavigator(
   transitionsBuilder: RM.transitions.upToBottom(),
