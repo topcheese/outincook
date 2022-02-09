@@ -1,63 +1,30 @@
+import 'blocs/auth_bloc.dart';
+import './data_source/hive_storage.dart';
+import 'ui/localization/localization.dart';
+import 'ui/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:outincook/src/ui/localization/localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-//import 'package:outincook/src/data_source/api.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
-import './src/data_source/data_source.dart';
-import 'src/ui/pages/login_page.dart';
-import 'src/ui/pages/pages.dart';
-import 'src/domain/entities/entities.dart';
-import 'src/ui/pages/recipes/recipes_page.dart';
-
-enum DBEnv { fake, hive, sembast, sharedPrefrences }
-
-late DBEnv dbEnv;
-
-/* final localStore = RM.inject(
-  () => {
-    DBEnv.sharedPrefrences: SharedPreferencesStore(),
-  }[dbEnv]!,
-); */
-
-/* final recipes = RM.injectCRUD<Recipe, RecipeParam>(() => RecipeRepository(),
-    param: () => RecipeParam(id: 1, userId: '2', title: 'Fake Recipe'),
-    readOnInitialization: true,
-    debugPrintWhenNotifiedPreMessage: '',
-    onCRUDSideEffects: OnCRUDSideEffects(
-      onWaiting: null,
-      onError: (err, refresh) {
-        RM.scaffold.showSnackBar(
-          SnackBar(
-            content: OutlinedButton.icon(
-              key: Key('Icons.refresh'),
-              onPressed: refresh,
-              icon: Icon(Icons.refresh),
-              label: Text('$err'),
-            ),
-          ),
-        );
-      },
-      onResult: (_) {},
-    )); */
-
-final navigator = RM.injectNavigator(
-  transitionsBuilder: RM.transitions.upToBottom(),
-  routes: {
-    '/': (data) => LoginPage(),
-    '/home': (data) => HomePage(),
-    '/recipes': (data) => RecipesPage(),
-    '/ingredients': (data) => IngredientsPage(recipe: data.arguments as Recipe),
-    '/addedit': (data) => AddEditPage(),
-  },
-);
+import 'ui/pages/add_edit_screen.dart/add_edit_screen.dart';
+import 'ui/pages/auth_page/auth_page.dart';
+import 'ui/pages/home_screen/home_screen.dart';
 
 void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await RM.storageInitializer(HiveStorage());
   runApp(App());
 }
 
 class App extends TopStatelessWidget {
   const App({Key? key}) : super(key: key);
+
+  @override
+  List<Future<void>>? ensureInitialization() {
+    return [
+      RM.storageInitializer(HiveStorage()),
+    ];
+  }
 
   @override
   Widget? splashScreen() {
@@ -70,11 +37,46 @@ class App extends TopStatelessWidget {
   }
 
   @override
+  Widget? errorScreen(error, void Function() refresh) {
+    return MaterialApp(
+      theme: ThemeData.dark(),
+      home: Scaffold(
+        body: Text('$error'),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: i18n.state.appTitle,
       // theme
-      theme: isDark.darkTheme,
+      theme: isDark.lightTheme,
+      darkTheme: isDark.darkTheme,
+      themeMode: isDark.themeMode,
+      // i18n
+      locale: i18n.locale,
+      localeResolutionCallback: i18n.localeResolutionCallback,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      home: OnAuthBuilder(
+        listenTo: authBloc.userRM,
+        onInitialWaiting: () => Center(child: CircularProgressIndicator()),
+        onUnsigned: () => AuthPage(),
+        onSigned: () => HomeScreen(),
+        useRouteNavigation: true,
+      ),
+      navigatorKey: RM.navigate.navigatorKey,
+      onGenerateRoute: RM.navigate.onGenerateRoute(
+        {
+          HomeScreen.routeName: (_) => const HomeScreen(),
+          AuthPage.routeName: (_) => const AuthPage(),
+          AddEditPage.routeName: (_) => const AddEditPage(),
+        },
+        // transitionsBuilder: RM.transitions.upToBottom(),
+      ),
     );
   }
 }

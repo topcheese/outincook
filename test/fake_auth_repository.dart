@@ -1,0 +1,109 @@
+import '../lib/data_source/firebase_auth_repository.dart';
+import '../lib/domain/common/extensions.dart';
+import '../lib/domain/entities/user.dart';
+import '../lib/domain/value_object/token.dart';
+
+class FakeAuthRepository implements FireBaseAuth {
+  dynamic exception;
+
+  @override
+  Future<void> init() async {}
+
+  @override
+  Future<User?> signUp(UserParam? param) async {
+    await Future.delayed(Duration(seconds: 1));
+    if (exception != null) {
+      throw exception;
+    }
+    return User(
+      userId: 'Id_${param!.email}',
+      email: param.email,
+      token: Token(
+        token: 'token_${param.email}',
+        refreshToken: 'refreshToken_${param.email}',
+        expiryDate: DateTimeX.current.add(
+          Duration(seconds: 10),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<User> signIn(UserParam? param) async {
+    await Future.delayed(Duration(seconds: 1));
+    if (exception != null) {
+      throw exception;
+    }
+    return User(
+      userId: 'Id_${param!.email}',
+      email: param.email,
+      token: Token(
+        token: 'token_${param.email}',
+        refreshToken: 'refreshToken__${param.email}',
+        expiryDate: DateTimeX.current.add(
+          Duration(seconds: 10),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<void> signOut(UserParam? param) async {
+    if (exception != null) {
+      throw exception;
+    }
+  }
+
+  @override
+  void dispose() {}
+
+  @override
+  Future<User?>? refreshToken(User? currentUser) {}
+}
+
+// class FakeAuthRepository extends IAuthRepository {
+//   dynamic exception;
+
+//   @override
+//   Future<User> signUp(String email, String password) async {
+//     await Future.delayed(Duration(seconds: 1));
+//     if (exception != null) {
+//       throw exception;
+//     }
+//     return User(
+//       userId: 'Id_$email',
+//       email: email,
+//       token: Token(
+//         token: 'token_$email',
+//         expiryDate: DateTimeX.current.add(
+//           Duration(seconds: 10),
+//         ),
+//       ),
+//     );
+//   }
+
+//   @override
+//   Future<User> login(String email, String password) async {
+//     await Future.delayed(Duration(seconds: 1));
+//     if (exception != null) {
+//       throw exception;
+//     }
+//     return User(
+//       userId: 'Id_$email',
+//       email: email,
+//       token: Token(
+//         token: 'token_$email',
+//         expiryDate: DateTimeX.current.add(
+//           Duration(seconds: 10),
+//         ),
+//       ),
+//     );
+//   }
+
+//   @override
+//   Future<void> logout() async {
+//     if (exception != null) {
+//       throw exception;
+//     }
+//   }
+// }
