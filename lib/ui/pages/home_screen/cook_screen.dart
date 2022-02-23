@@ -1,12 +1,13 @@
 part of 'home_screen.dart';
 
-class TodoList extends StatelessWidget {
-  const TodoList();
+class CookScreen extends StatelessWidget {
+  const CookScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return OnReactive(
       () {
-        return /* ListView.builder(
+        return ListView.builder(
           itemCount: todosBloc.todosFiltered.state.length + 1,
           itemBuilder: (BuildContext context, int index) {
             if (index <= todosBloc.todosFiltered.state.length - 1) {
@@ -27,8 +28,7 @@ class TodoList extends StatelessWidget {
               );
             }
           },
-        ) */
-            Text('Ingredients');
+        );
       },
     );
   }

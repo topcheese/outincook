@@ -16,6 +16,7 @@ part 'languages.dart';
 part 'stats_counter.dart';
 part 'recipe_item.dart';
 part 'recipe_list.dart';
+part 'cook_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static String routeName = '/HomeScreen';
@@ -64,7 +65,11 @@ class HomeScreen extends StatelessWidget {
               return OnTabPageViewBuilder(
                 builder: (_) => PageView(
                   controller: appTab.pageController,
-                  children: [const TodoList(), const StatsCounter()],
+                  children: [
+                    const StatsCounter(),
+                    const TodoList(),
+                    const CookScreen()
+                  ],
                 ),
               );
             },
